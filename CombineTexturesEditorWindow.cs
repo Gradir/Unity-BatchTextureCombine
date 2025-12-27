@@ -14,7 +14,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
-namespace TechArtTest
+namespace Gradir
 {
     public class CombineTexturesEditorWindow : EditorWindow
     {
@@ -37,7 +37,7 @@ namespace TechArtTest
 	    // ===== Texture Search =====
         public Texture2D[] TexturesToCombine;
         public Shader ShaderForPackedTextures;
-        public string[] TextureFolderPaths = { "Assets/techart/maps"};
+        public string[] TextureFolderPaths = { "Assets/Textures"};
         
         public ColorChannel MetallicTargetChannel = ColorChannel.R;
         public ColorChannel OcclusionTargetChannel = ColorChannel.G;
@@ -52,7 +52,7 @@ namespace TechArtTest
         [NonReorderable] public string[] MetallicSuffixes = new[] { "_metal" };
         [NonReorderable] public string[] RoughnessSuffixes = new[] { "_rough" };
         [NonReorderable] public string[] OcclusionSuffixes = new[] { "_AmbientOcclusion", "_AO"};
-        [NonReorderable] public string[] MaterialFolderPaths = new[] { "Assets/techart/materials"};
+        [NonReorderable] public string[] MaterialFolderPaths = new[] { "Assets/Materials"};
         
         // The compute shader reference is set through this script's inspector
         [SerializeField] ComputeShader _fastPack;
@@ -86,7 +86,8 @@ namespace TechArtTest
 	    const string Csmain = "CSMain";
 	    const char Separator = '_';
 	    const char Slash = '/';
-        
+        const string Warning = "Source textures' compression should be disabled for this process";
+		
         [MenuItem("Assets/Combine Textures..", false, 0)]
         [MenuItem("Tools/Combine Textures...")]
         public static void ShowWindow()
@@ -128,8 +129,8 @@ namespace TechArtTest
             _selectedMode = EditorGUILayout.Popup("Choose mode", _selectedMode, _modes);
             _scrollPosition =
                 GUILayout.BeginScrollView(_scrollPosition, false, true, GUILayout.ExpandHeight(false));
-            EditorGUILayout.HelpBox("Source textures' compression should be disabled for this process",
-	            MessageType.Info);
+            EditorGUILayout.HelpBox(Warning, MessageType.Info);
+			
             switch ((TextureChoosingMode)_selectedMode)
             {
                 default:
@@ -481,4 +482,5 @@ namespace TechArtTest
 	    public static Color BackgroundColor = new(1f, 0.91f, 0.64f);
     }
 }
+
 #endif
